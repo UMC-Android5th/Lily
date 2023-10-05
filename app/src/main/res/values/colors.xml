@@ -2,4 +2,9 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="song_player_bg">#808080</color>
+    <color name="song_player">#FF336699</color>
+    <color name="transparent">#00000000</color>
+    <color name="gray_color">#929292</color>
+    <color name="select_color">#F23C30EF</color>
 </resources>
