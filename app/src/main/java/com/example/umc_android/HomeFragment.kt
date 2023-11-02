@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.viewpager2.widget.ViewPager2
 import com.example.umc_android.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
 
     lateinit var binding: FragmentHomeBinding
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -28,6 +30,15 @@ class HomeFragment : Fragment() {
         binding.homePannelUnderAlbum3Iv.setOnClickListener{
             (context as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.main_frm,AlbumFragment()).commitAllowingStateLoss()
         }
+
+        val bannerAdapter = BannerVPAdapter(this)
+        bannerAdapter.addFragement(BannerFragment(R.drawable.img_home_viewpager_exp))
+        bannerAdapter.addFragement(BannerFragment(R.drawable.img_home_viewpager_exp2))
+        bannerAdapter.addFragement(BannerFragment(R.drawable.img_home_viewpager_exp))
+        bannerAdapter.addFragement(BannerFragment(R.drawable.img_home_viewpager_exp2))
+        binding.homePannelViewpagerExpIv.adapter = bannerAdapter
+        binding.homePannelViewpagerExpIv.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+
         return binding.root
     }
 }
