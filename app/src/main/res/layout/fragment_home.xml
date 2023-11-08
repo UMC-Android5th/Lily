@@ -15,11 +15,11 @@ tools:context=".MainActivity">
         android:id="@+id/home_pannel_background_iv"
         android:layout_width="match_parent"
         android:layout_height="430dp"
-        android:src="@drawable/img_first_album_default"
         android:scaleType="centerCrop"
-        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/img_first_album_default"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/home_pannel_btn_mike_iv"
