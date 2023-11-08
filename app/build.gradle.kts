@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.example.umc_android"
-    compileSdk = 33
+    compileSdk = 34
 
     viewBinding {
         enable = true
