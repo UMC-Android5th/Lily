@@ -87,6 +87,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun updateMainPlayerCl(album : Album) {
+        binding.mainMiniplayerTitleTv.text = album.title
+        binding.mainMiniplayerSingerTv.text = album.singer
+        binding.mainMiniplayerProgressSb.progress = 0
+    }
+}
+
+
     private fun setMiniPlayer(song:Song) {
         binding.mainMiniplayerTitleTv.text = song.title
         binding.mainMiniplayerSingerTv.text = song.singer

@@ -203,112 +203,122 @@ tools:context=".MainActivity">
         app:layout_constraintStart_toEndOf="@id/home_under_in_tv"
         app:layout_constraintTop_toBottomOf="@id/home_pannel_background_iv" />
 
-    <ImageView
-        android:id="@+id/home_pannel_under_album1_iv"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/img_album_exp2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/home_pannel_under_main_tv" />
-
-    <ImageView
-        android:id="@+id/home_pannel_under_album2_iv"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/img_album_exp2"
-        app:layout_constraintStart_toEndOf="@id/home_pannel_under_album1_iv"
-        app:layout_constraintTop_toBottomOf="@+id/home_pannel_under_main_tv" />
-
-    <ImageView
-        android:id="@+id/home_pannel_under_album3_iv"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/img_album_exp2"
-        app:layout_constraintStart_toEndOf="@id/home_pannel_under_album2_iv"
-        app:layout_constraintTop_toBottomOf="@+id/home_pannel_under_main_tv" />
-
-    <TextView
-        android:id="@+id/home_under_album1_title_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="5dp"
-        android:text="LILAC"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:textSize="22dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/home_pannel_under_album1_iv" />
-
-    <TextView
-        android:id="@+id/home_under_album1_singer_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="0dp"
-        android:text="아이유 (IU)"
-        android:textColor="@color/gray_color"
-        android:textSize="17dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/home_under_album1_title_tv" />
-
-    <TextView
-        android:id="@+id/home_under_album2_title_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="170dp"
-        android:layout_marginTop="5dp"
-        android:text="제목"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:textSize="22dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/home_pannel_under_album2_iv" />
-
-    <TextView
-        android:id="@+id/home_under_album2_singer_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="170dp"
-        android:layout_marginTop="0dp"
-        android:text="가수"
-        android:textColor="@color/gray_color"
-        android:textSize="17dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/home_under_album2_title_tv" />
-
-    <TextView
-        android:id="@+id/home_under_album3_title_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="155dp"
-        android:layout_marginTop="5dp"
-        android:text="제목"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:textSize="22dp"
-        app:layout_constraintStart_toStartOf="@id/home_under_album2_title_tv"
-        app:layout_constraintTop_toBottomOf="@id/home_pannel_under_album2_iv" />
-
-    <TextView
-        android:id="@+id/home_under_album3_singer_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="155dp"
-        android:layout_marginTop="0dp"
-        android:text="가수"
-        android:textColor="@color/gray_color"
-        android:textSize="17dp"
-        app:layout_constraintStart_toStartOf="@id/home_under_album2_singer_tv"
-        app:layout_constraintTop_toBottomOf="@id/home_under_album2_title_tv" />
+<!--    <ImageView-->
+<!--        android:id="@+id/home_pannel_under_album1_iv"-->
+<!--        android:layout_width="140dp"-->
+<!--        android:layout_height="140dp"-->
+<!--        android:layout_marginStart="16dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:src="@drawable/img_album_exp2"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/home_pannel_under_main_tv" />-->
 
 <!--    <ImageView-->
+<!--        android:id="@+id/home_pannel_under_album2_iv"-->
+<!--        android:layout_width="140dp"-->
+<!--        android:layout_height="140dp"-->
+<!--        android:layout_marginStart="15dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:src="@drawable/img_album_exp2"-->
+<!--        app:layout_constraintStart_toEndOf="@id/home_pannel_under_album1_iv"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/home_pannel_under_main_tv" />-->
+
+<!--    <ImageView-->
+<!--        android:id="@+id/home_pannel_under_album3_iv"-->
+<!--        android:layout_width="140dp"-->
+<!--        android:layout_height="140dp"-->
+<!--        android:layout_marginStart="15dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:src="@drawable/img_album_exp2"-->
+<!--        app:layout_constraintStart_toEndOf="@id/home_pannel_under_album2_iv"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/home_pannel_under_main_tv" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/home_under_album1_title_tv"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="16dp"-->
+<!--        android:layout_marginTop="5dp"-->
+<!--        android:text="LILAC"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:textStyle="bold"-->
+<!--        android:textSize="22dp"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/home_pannel_under_album1_iv" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/home_under_album1_singer_tv"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="16dp"-->
+<!--        android:layout_marginTop="0dp"-->
+<!--        android:text="아이유 (IU)"-->
+<!--        android:textColor="@color/gray_color"-->
+<!--        android:textSize="17dp"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/home_under_album1_title_tv" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/home_under_album2_title_tv"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="170dp"-->
+<!--        android:layout_marginTop="5dp"-->
+<!--        android:text="제목"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:textStyle="bold"-->
+<!--        android:textSize="22dp"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/home_pannel_under_album2_iv" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/home_under_album2_singer_tv"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="170dp"-->
+<!--        android:layout_marginTop="0dp"-->
+<!--        android:text="가수"-->
+<!--        android:textColor="@color/gray_color"-->
+<!--        android:textSize="17dp"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/home_under_album2_title_tv" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/home_under_album3_title_tv"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="155dp"-->
+<!--        android:layout_marginTop="5dp"-->
+<!--        android:text="제목"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:textStyle="bold"-->
+<!--        android:textSize="22dp"-->
+<!--        app:layout_constraintStart_toStartOf="@id/home_under_album2_title_tv"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/home_pannel_under_album2_iv" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/home_under_album3_singer_tv"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="155dp"-->
+<!--        android:layout_marginTop="0dp"-->
+<!--        android:text="가수"-->
+<!--        android:textColor="@color/gray_color"-->
+<!--        android:textSize="17dp"-->
+<!--        app:layout_constraintStart_toStartOf="@id/home_under_album2_singer_tv"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/home_under_album2_title_tv" />-->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/home_today_music_album_rv"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="10dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/home_pannel_under_main_tv"/>
+
+
+    <!--    <ImageView-->
 <!--        android:id="@+id/home_pannel_viewpager_exp_iv"-->
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="90dp"-->
