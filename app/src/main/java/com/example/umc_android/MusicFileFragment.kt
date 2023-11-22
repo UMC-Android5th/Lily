@@ -11,12 +11,8 @@ import com.example.umc_android.databinding.FragmentLockerSavedsongBinding
 class MusicFileFragment :Fragment() {
     lateinit var binding : FragmentLockerMusicfileBinding
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentLockerMusicfileBinding.inflate(inflater,container,false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = FragmentLockerMusicfileBinding.inflate(inflater, container, false)
 
         return binding.root
     }
