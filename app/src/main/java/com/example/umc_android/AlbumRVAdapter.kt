@@ -9,6 +9,7 @@ class AlbumRVAdapter(private var albumList: ArrayList<Album>): RecyclerView.Adap
 
     interface MyItemClickListener{
         fun onItemClick(album: Album)
+        fun onPlayAlbum(album: Album)
     }
 
     private lateinit var mItemClickListener: MyItemClickListener
@@ -27,6 +28,13 @@ class AlbumRVAdapter(private var albumList: ArrayList<Album>): RecyclerView.Adap
         holder.itemView.setOnClickListener{
             mItemClickListener.onItemClick(albumList[position])
         }
+        holder.binding.itemAlbumPlayImgIv.setOnClickListener {
+            mItemClickListener.onItemClick(albumList[position])
+        }
+    }
+    interface OnItemClickListener {
+        fun onItemClick(album : Album)
+        fun onPlayAlbum(album : Album)
     }
 
     override fun getItemCount(): Int = albumList.size
@@ -38,6 +46,9 @@ class AlbumRVAdapter(private var albumList: ArrayList<Album>): RecyclerView.Adap
             binding.itemAlbumSingerTv.text = album.singer
             binding.itemAlbumCoverImgIv.setImageResource(album.coverImage!!)
         }
+    }
+    interface CommunicationInterface {
+        fun sendData(album: Album)
     }
 
 }

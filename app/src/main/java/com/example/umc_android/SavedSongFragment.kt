@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.umc_android.databinding.FragmentLockerSavedsongBinding
 import com.example.umc_android.databinding.FragmentSavedSongBinding
 import com.example.umc_android.databinding.FragmentVideoBinding
+import com.google.gson.Gson
 
 class SavedSongFragment : Fragment() {
     private var albumDatas = ArrayList<Album>()
@@ -38,8 +39,28 @@ class SavedSongFragment : Fragment() {
         binding.lockerMusicAlbumRv.adapter = lockerAlbumRVAdapter
         binding.lockerMusicAlbumRv.layoutManager = LinearLayoutManager(requireActivity())
 
+        lockerAlbumRVAdapter.setItemClickListener(object : LockerAlbumRVAdapter.OnItemClickListener {
+            override fun onItemClick(album: Album) {
+                changeAlbumFragment(album)
+            }
+            override fun onRemoveAlbum(position: Int) {
+                lockerAlbumRVAdapter.removeItem(position)
+            }
+        })
 
         return binding.root
+    }
+
+    private fun changeAlbumFragment(album: Album) {
+        (context as MainActivity).supportFragmentManager.beginTransaction()
+            .replace(R.id.main_frm, AlbumFragment().apply {
+                arguments = Bundle().apply {
+                    val gson = Gson()
+                    val albumToJson = gson.toJson(album)
+                    putString("album", albumToJson)
+                }
+            })
+            .commitAllowingStateLoss()
     }
 }
 

@@ -10,10 +10,17 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.umc_android.databinding.FragmentHomeBinding
 import com.google.gson.Gson
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), AlbumRVAdapter.CommunicationInterface {
 
     lateinit var binding: FragmentHomeBinding
     private var albumDatas = ArrayList<Album>()
+
+    override fun sendData(album: Album) {
+        if (activity is MainActivity) {
+            val activity = activity as MainActivity
+            activity.updateMainPlayerCl(album)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,7 +63,9 @@ class HomeFragment : Fragment() {
             override fun onItemClick(album: Album) {
                 changeToAlbumFragment(album)
             }
-
+            override fun onPlayAlbum(album: Album) {
+                sendData(album)
+            }
         })
 
         val bannerAdapter = BannerVPAdapter(this)
