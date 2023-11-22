@@ -65,24 +65,6 @@ class SongActivity : AppCompatActivity() {
 
     }
 
-    fun setPlayerStatus(isPlaying : Boolean) {
-        //스레드 초기화
-        song.isPlaying = isPlaying
-        timer.isPlaying = isPlaying
-
-        if(isPlaying) {
-            binding.songMiniplayerIv.visibility = View.VISIBLE
-            binding.songPauseIv.visibility = View.GONE
-            mediaPlyer?.start()
-        }
-        else {
-            binding.songMiniplayerIv.visibility = View.GONE
-            binding.songPauseIv.visibility = View.VISIBLE
-            if(mediaPlyer?.isPlaying == true) {
-                mediaPlyer?.pause()
-            }
-        }
-    }
     //반복, 셔틀 이미지 변경 코드
     fun setPlayerOption(isPlaying: Boolean) {
         if(isPlaying) {
@@ -103,6 +85,24 @@ class SongActivity : AppCompatActivity() {
         else {
             binding.songRandomIv.visibility = View.GONE
             binding.songRepeat2Iv.visibility = View.VISIBLE
+        }
+    }
+    fun setPlayerStatus(isPlaying : Boolean) {
+        //스레드 초기화
+        song.isPlaying = isPlaying
+        timer.isPlaying = isPlaying
+
+        if(isPlaying) {
+            binding.songMiniplayerIv.visibility = View.VISIBLE
+            binding.songPauseIv.visibility = View.GONE
+            mediaPlyer?.start()
+        }
+        else {
+            binding.songMiniplayerIv.visibility = View.GONE
+            binding.songPauseIv.visibility = View.VISIBLE
+            if(mediaPlyer?.isPlaying == true) {
+                mediaPlyer?.pause()
+            }
         }
     }
 
