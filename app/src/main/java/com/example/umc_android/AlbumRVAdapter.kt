@@ -7,10 +7,6 @@ import com.example.umc_android.databinding.ItemAlbumBinding
 
 class AlbumRVAdapter(private var albumList: ArrayList<Album>): RecyclerView.Adapter<AlbumRVAdapter.ViewHolder>() {
 
-    interface MyItemClickListener{
-        fun onItemClick(album: Album)
-        fun onPlayAlbum(album: Album)
-    }
 
     private lateinit var mItemClickListener: MyItemClickListener
     fun setMyItemClickListener(itemClickListener: MyItemClickListener){
@@ -32,10 +28,14 @@ class AlbumRVAdapter(private var albumList: ArrayList<Album>): RecyclerView.Adap
             mItemClickListener.onItemClick(albumList[position])
         }
     }
-    interface OnItemClickListener {
-        fun onItemClick(album : Album)
-        fun onPlayAlbum(album : Album)
+    interface MyItemClickListener{
+        fun onItemClick(album: Album)
+        fun onPlayAlbum(album: Album)
     }
+//    interface OnItemClickListener {
+//        fun onItemClick(album : Album)
+//        fun onPlayAlbum(album : Album)
+//    }
 
     override fun getItemCount(): Int = albumList.size
 
