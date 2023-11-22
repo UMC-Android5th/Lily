@@ -46,28 +46,28 @@
         app:layout_constraintEnd_toStartOf="@+id/item_locker_album_more_iv"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/btn_toggle_off_iv"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="5dp"
-        android:src="@drawable/btn_toggle_off"
-        android:layout_gravity="center"
+    <Switch
+        android:id="@+id/switchRV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:switchMinWidth="50dp"
+        android:switchPadding="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/item_locker_album_play_img_iv"/>
+        app:layout_constraintEnd_toStartOf="@+id/item_locker_album_play_img_iv"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/btn_toggle_on_iv"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="5dp"
-        android:src="@drawable/btn_toggle_on"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/item_locker_album_play_img_iv" />
+<!--    <ImageView-->
+<!--        android:id="@+id/btn_toggle_on_iv"-->
+<!--        android:layout_width="40dp"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:layout_marginStart="5dp"-->
+<!--        android:src="@drawable/btn_toggle_on"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:visibility="gone"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintEnd_toStartOf="@id/item_locker_album_play_img_iv" />-->
 
 
     <LinearLayout
