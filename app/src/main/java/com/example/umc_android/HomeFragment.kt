@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.example.umc_android.databinding.FragmentHomeBinding
 import com.google.gson.Gson
-
 class HomeFragment : Fragment(), AlbumRVAdapter.CommunicationInterface {
 
     lateinit var binding: FragmentHomeBinding

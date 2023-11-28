@@ -1,11 +1,14 @@
 package com.example.umc_android
 
+import android.app.ActivityManager
+import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.umc_android.databinding.ActivitySongBinding
 import com.google.gson.Gson
@@ -14,27 +17,35 @@ class SongActivity : AppCompatActivity() {
 
     //전역변수
     lateinit var binding : ActivitySongBinding
-    lateinit var song : Song
+    //lateinit var song : Song
     lateinit var timer : Timer
-    private var mediaPlyer: MediaPlayer? = null
-    private var gson: Gson = Gson()
+    private var mediaPlayer: MediaPlayer? = null
+    //private var gson: Gson = Gson()
+    val songs = arrayListOf<Song>()
+    lateinit var songDB: SongDatabase
+    var nowPos = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySongBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        initPlayList()
 
-        initSong()
-        setPlayer(song)
+        initPlayList()
+       //initSong()
+        initClickListener()
+        //setPlayer(songs)
 
         binding.songDownIb.setOnClickListener {
             finish()
         }
         binding.songMiniplayerIv.setOnClickListener{
-            setPlayerStatus(false)
+            setPlayerStatus(true)
+            startStopService()
         }
         binding.songPauseIv.setOnClickListener{
-            setPlayerStatus(true)
+            setPlayerStatus(false)
+            startStopService()
         }
         binding.songRepeatIv.setOnClickListener{
             setPlayerOption(false)
@@ -62,6 +73,9 @@ class SongActivity : AppCompatActivity() {
             binding.songMusicTitleTv.text = intent.getStringExtra("title")
             binding.songSingerNameTv.text = intent.getStringExtra("singer")
         }
+        binding.songLikeIv.setOnClickListener {
+            setLike(songs[nowPos].isLike)
+        }
 
     }
 
@@ -87,36 +101,45 @@ class SongActivity : AppCompatActivity() {
             binding.songRepeat2Iv.visibility = View.VISIBLE
         }
     }
-    fun setPlayerStatus(isPlaying : Boolean) {
-        //스레드 초기화
-        song.isPlaying = isPlaying
-        timer.isPlaying = isPlaying
+//    fun setPlayerStatus(isPlaying : Boolean) {
+//        //스레드 초기화
+//        song.isPlaying = isPlaying
+//        timer.isPlaying = isPlaying
+//
+//        if(isPlaying) {
+//            binding.songMiniplayerIv.visibility = View.VISIBLE
+//            binding.songPauseIv.visibility = View.GONE
+//            mediaPlyer?.start()
+//        }
+//        else {
+//            binding.songMiniplayerIv.visibility = View.GONE
+//            binding.songPauseIv.visibility = View.VISIBLE
+//            if(mediaPlyer?.isPlaying == true) {
+//                mediaPlyer?.pause()
+//            }
+//        }
+//    }
 
-        if(isPlaying) {
-            binding.songMiniplayerIv.visibility = View.VISIBLE
-            binding.songPauseIv.visibility = View.GONE
-            mediaPlyer?.start()
-        }
-        else {
-            binding.songMiniplayerIv.visibility = View.GONE
-            binding.songPauseIv.visibility = View.VISIBLE
-            if(mediaPlyer?.isPlaying == true) {
-                mediaPlyer?.pause()
-            }
-        }
+    override fun onBackPressed() {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.putExtra("message", "뒤로가기 버튼 클릭")
+
+        setResult(RESULT_OK, intent)
+        finish()
     }
 
     //사용자가 포커스를 잃었을 때 음악을 중지
     override fun onPause() {
         super.onPause()
+        songs[nowPos].second = (songs[nowPos].playTime * binding.songProgressSb.progress) / 100000
+        Log.d("second", songs[nowPos].second.toString())
+        songs[nowPos].isPlaying = false
         setPlayerStatus(false)
 
-        song.second= ((binding.songProgressSb.progress * song.playTime)/100)/1000
         val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
-        val songJson = gson.toJson(song)
-        editor.putString("songData", songJson)
-
+        editor.putInt("songId", songs[nowPos].id)
+        editor.putInt("second", songs[nowPos].second)
         editor.apply()
     }
 
@@ -124,22 +147,70 @@ class SongActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         timer.interrupt()
-        mediaPlyer?.release() //미디어 플레이어가 갖고 있던 리소스 해제
-        mediaPlyer = null //미디어 플레이어 해제
+        mediaPlayer?.release() //미디어 플레이어가 갖고 있던 리소스 해제
+        mediaPlayer = null //미디어 플레이어 해제
+    }
+    private fun initPlayList(){
+        songDB = SongDatabase.getInstance(this)!!
+        songs.addAll(songDB.songDao().getSongs())
     }
 
-    private fun initSong(){
-        if(intent.hasExtra("title") && intent.hasExtra("singer")){
-            song = Song(
-                intent.getStringExtra("title")!!,
-                intent.getStringExtra("singer")!!,
-                intent.getIntExtra("second", 0),
-                intent.getIntExtra("playTime", 0),
-                intent.getBooleanExtra("isPlaying", false),
-                intent.getStringExtra("music")!!
-            )
+    private fun initClickListener(){
+        binding.songDownIb.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            intent.putExtra("message", songs[nowPos].title + "_" + songs[nowPos].singer)
+            setResult(RESULT_OK, intent)
+            finish()
         }
-        startTimer()
+
+        binding.songMiniplayerIv.setOnClickListener {
+            setPlayerStatus(true)
+        }
+
+        binding.songPauseIv.setOnClickListener {
+            setPlayerStatus(false)
+        }
+        binding.songNextIv.setOnClickListener {
+            moveSong(+1)
+        }
+        binding.songPreviousIv.setOnClickListener {
+            moveSong(-1)
+        }
+
+    }
+
+    private fun moveSong(direct: Int) { // direct는 +1 또는 -1임
+        if (nowPos + direct < 0) {
+            Toast.makeText(this,"first song",Toast.LENGTH_SHORT).show()
+        }
+
+        else if (nowPos + direct >= songs.size){
+            Toast.makeText(this,"last song",Toast.LENGTH_SHORT).show()
+        }
+
+        else {
+            nowPos += direct
+            timer.interrupt()
+            startTimer()
+
+            mediaPlayer?.release()
+            mediaPlayer = null
+
+            setPlayer(songs[nowPos])
+        }
+    }
+
+
+    private fun setLike(isLike: Boolean) {
+        songs[nowPos].isLike = !isLike
+        songDB.songDao().updateIsLikeById(!isLike, songs[nowPos].id)
+
+        if (!isLike) {
+            binding.songLikeIv.setImageResource(R.drawable.ic_my_like_on)
+        } else {
+            binding.songLikeIv.setImageResource(R.drawable.ic_my_like_off)
+        }
+
     }
 
     private fun setPlayer(song: Song){
@@ -148,14 +219,62 @@ class SongActivity : AppCompatActivity() {
         binding.songStartTimeTv.text = String.format("%02d:%02d", song.second / 60, song.second % 60)
         binding.songEndTimeTv.text = String.format("%02d:%02d", song.playTime / 60, song.playTime % 60)
         binding.songProgressSb.progress = (song.second * 1000 / song.playTime)
+        binding.songAlbumIv.setImageResource(song.coverImg!!)
         val music = resources.getIdentifier(song.music, "raw", this.packageName)
-        mediaPlyer = MediaPlayer.create(this,music)
+        mediaPlayer = MediaPlayer.create(this,music)
+
+        if(song.isLike) {
+            binding.songLikeIv.setImageResource(R.drawable.ic_my_like_on)
+        }
+        else {
+            binding.songLikeIv.setImageResource(R.drawable.ic_my_like_off)
+        }
 
         setPlayerStatus(song.isPlaying)
     }
 
+    fun setPlayerStatus (isPlaying : Boolean){
+        songs[nowPos].isPlaying = isPlaying
+        timer.isPlaying = isPlaying
+
+        if(isPlaying){ // 재생중
+            binding.songMiniplayerIv.visibility = View.GONE
+            binding.songPauseIv.visibility = View.VISIBLE
+            mediaPlayer?.start()
+        } else { // 일시정지
+            binding.songMiniplayerIv.visibility = View.VISIBLE
+            binding.songPauseIv.visibility = View.GONE
+            if(mediaPlayer?.isPlaying == true) { // 재생 중이 아닐 때에 pause를 하면 에러가 나기 때문에 이를 방지
+                mediaPlayer?.pause()
+            }
+        }
+    }
+    private fun startStopService() {
+        if (isServiceRunning(SongDatabase::class.java)) {
+            Toast.makeText(this, "Foreground Service Stopped", Toast.LENGTH_SHORT).show()
+            stopService(Intent(this, SongDatabase::class.java))
+        }
+        else {
+            Toast.makeText(this, "Foreground Service Started", Toast.LENGTH_SHORT).show()
+            startService(Intent(this, SongDatabase::class.java))
+        }
+    }
+
+    private fun isServiceRunning(inputClass : Class<SongDatabase>) : Boolean {
+        val manager : ActivityManager = getSystemService(
+            Context.ACTIVITY_SERVICE
+        ) as ActivityManager
+
+        for (service : ActivityManager.RunningServiceInfo in manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (inputClass.name.equals(service.service.className)) {
+                return true
+            }
+
+        }
+        return false
+    }
     private fun startTimer(){
-        timer = Timer(song.playTime, song.isPlaying)
+        timer = Timer(songs[nowPos].playTime,songs[nowPos].isPlaying)
         timer.start()
     }
 
@@ -178,7 +297,8 @@ class SongActivity : AppCompatActivity() {
                         mills += 50
 
                         runOnUiThread {
-                            binding.songProgressSb.progress = ((mills / playTime)*100).toInt()
+                            binding.songProgressSb.progress = ((mills/playTime) * 100).toInt()
+                            //binding.songProgressSb.progress = ((mills / playTime)*100).toInt()
                         }
 
                         if (mills % 1000 == 0f){
