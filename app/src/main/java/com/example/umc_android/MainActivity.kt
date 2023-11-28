@@ -1,21 +1,23 @@
 package com.example.umc_android
 
 import android.content.Intent
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.SeekBar
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import com.example.umc_android.databinding.ActivityMainBinding
-import com.google.gson.Gson
 
-class MainActivity : AppCompatActivity() {
+class MainActivity :  AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
+    lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
 
+    val songs = arrayListOf<Song>()
+    lateinit var songDB: SongDatabase
+    var nowPos = 0
     private var song:Song = Song()
-    private var gson:Gson = Gson()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,18 +26,19 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         inputDummySongs()
+        initPlayList()
         initBottomNavigation()
 
-//        activityResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-//            if (result.resultCode == RESULT_OK) {
-//                val data = result.data
-//                if (data != null) {
-//                    val message = data.getStringExtra("message")
-//                    Log.d("message", message!!)
-//                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//        }
+        activityResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val data = result.data
+                if (data != null) {
+                    val message = data.getStringExtra("message")
+                    Log.d("message", message!!)
+                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
 
         //val song = Song(binding.mainMiniplayerTitleTv.text.toString(), binding.mainMiniplayerSingerTv.text.toString(), 0, 60, false, "flo_music")
 
@@ -54,7 +57,7 @@ class MainActivity : AppCompatActivity() {
             editor.apply()
 
             val intent = Intent(this,SongActivity::class.java)
-            startActivity(intent)
+            activityResultLauncher.launch(intent)
         }
 
         Log.d("Song",song.title + song.singer)
@@ -105,50 +108,64 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun updateMainPlayerCl(album : Album) {
-        binding.mainMiniplayerTitleTv.text = album.title
-        binding.mainMiniplayerSingerTv.text = album.singer
+    fun updateMainPlayerCl(song: Album) {
+        binding.mainMiniplayerTitleTv.text = song.title
+        binding.mainMiniplayerSingerTv.text = song.singer
         binding.mainMiniplayerProgressSb.progress = 0
     }
 
 
-    private fun setMiniPlayer(song:Song) {
-        binding.mainMiniplayerTitleTv.text = song.title
-        binding.mainMiniplayerSingerTv.text = song.singer
-        binding.mainMiniplayerProgressSb.progress = (song.second*100000)/song.playTime
-    }
 //    override fun onStart() {
 //        super.onStart()
-//        val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)
-//        val songJson = sharedPreferences.getString("songData", null)
 //
-//        song = if(songJson == null) {
-//            Song("라일락", "아이유(IU)",0, 60, false, "flo_music")
-//        }else {
-//            gson.fromJson(songJson, song::class.java)
+//        val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)
+//        // songId는 SongActivity에서 onPause가 호출되었을 때
+//        // 재생 중이던 노래의 id(pk)이다.
+//        val songId = sharedPreferences.getInt("songId", 0)
+//
+//        // SongDatabase의 인스턴스를 가져온다.
+//        val songDB = SongDatabase.getInstance(this)!!
+//
+//        song = if (songId == 0){ // 재생 중이던 노래가 없었으면
+//            songDB.songDao().getSong(1)
+//        } else{ // 재생 중이던 노래가 있었으면
+//            songDB.songDao().getSong(songId)
 //        }
 //
-//
+//        Log.d("song ID", song.id.toString())
+//        setMiniPlayer(song) // song의 정보로 MiniPlayer를 setting
 //    }
-    override fun onStart() {
-        super.onStart()
+    override fun onResume() {
+        super.onResume()
 
         val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)
-        // songId는 SongActivity에서 onPause가 호출되었을 때
-        // 재생 중이던 노래의 id(pk)이다.
         val songId = sharedPreferences.getInt("songId", 0)
 
-        // SongDatabase의 인스턴스를 가져온다.
-        val songDB = SongDatabase.getInstance(this)!!
-
-        song = if (songId == 0){ // 재생 중이던 노래가 없었으면
-            songDB.songDao().getSong(1)
-        } else{ // 재생 중이던 노래가 있었으면
-            songDB.songDao().getSong(songId)
+        nowPos = getPlayingSongPosition(songId)
+        setMiniPlayer(songs[nowPos])
+    }
+    private fun getPlayingSongPosition(songId: Int): Int{
+        for (i in 0 until songs.size){
+            if (songs[i].id == songId){
+                return i
+            }
         }
+        return 0
+    }
 
-        Log.d("song ID", song.id.toString())
-        setMiniPlayer(song) // song의 정보로 MiniPlayer를 setting
+    private fun initPlayList(){
+        songDB = SongDatabase.getInstance(this)!!
+        songs.addAll(songDB.songDao().getSongs())
+    }
+
+    private fun setMiniPlayer(song : Song) {
+        binding.mainMiniplayerTitleTv.text = song.title
+        binding.mainMiniplayerSingerTv.text = song.singer
+        Log.d("songInfo", song.toString())
+        val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)
+        val second = sharedPreferences.getInt("second", 0)
+        Log.d("spfSecond", second.toString())
+        binding.mainMiniplayerProgressSb.progress = (second * 100000 / song.playTime)
     }
     private fun inputDummySongs(){
         val songDB = SongDatabase.getInstance(this)!!

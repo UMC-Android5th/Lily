@@ -132,15 +132,14 @@ class SongActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         songs[nowPos].second = (songs[nowPos].playTime * binding.songProgressSb.progress) / 100000
+        Log.d("second", songs[nowPos].second.toString())
         songs[nowPos].isPlaying = false
         setPlayerStatus(false)
 
-        //song.second= ((binding.songProgressSb.progress * song.playTime)/100)/1000
         val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
-        //val songJson = gson.toJson(song)
         editor.putInt("songId", songs[nowPos].id)
-
+        editor.putInt("second", songs[nowPos].second)
         editor.apply()
     }
 
@@ -202,39 +201,6 @@ class SongActivity : AppCompatActivity() {
     }
 
 
-
-    private fun initSong(){
-//        if(intent.hasExtra("title") && intent.hasExtra("singer")){
-//            song = Song(
-//                intent.getStringExtra("title")!!,
-//                intent.getStringExtra("singer")!!,
-//                intent.getIntExtra("second", 0),
-//                intent.getIntExtra("playTime", 0),
-//                intent.getBooleanExtra("isPlaying", false),
-//                intent.getStringExtra("music")!!
-//            )
-//        }
-//        startTimer()
-        val spf = getSharedPreferences("song", MODE_PRIVATE)
-        val songId = spf.getInt("songId", 0)
-
-        nowPos = getPlayingSongPosition(songId)
-
-        Log.d("now Song ID", songs[nowPos].id.toString())
-
-        startTimer()
-        setPlayer(songs[nowPos])
-    }
-
-    // songId로 position을 얻는 메서드
-    private fun getPlayingSongPosition(songId: Int): Int{
-        for (i in 0 until songs.size){
-            if (songs[i].id == songId){
-                return i
-            }
-        }
-        return 0
-    }
     private fun setLike(isLike: Boolean) {
         songs[nowPos].isLike = !isLike
         songDB.songDao().updateIsLikeById(!isLike, songs[nowPos].id)
